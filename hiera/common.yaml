@@ -1,0 +1,15 @@
+---
+roles:
+- default_role
+
+users:
+ 'maxim.mirny':
+    uid: 5100
+    realname: 'Maxim Mirny'
+    sshkey: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDrFyhWTVT/cx8ZNiaMhlfD78lVZ3g0txUBdY6mDs5UcBpl7kHOIszgNHiubz8FI1dqsS9FtsMD8LEsND85GxnsHFbglQkK3itvdclLp4xk7YElFh1GfZDyQYJFjgxVG9Wefe/siDAaVeFY1LqbcuffEJZ62FhdapwJpYpqQN8iIftGLLzpJat3zqvXnK2Q/SNRG21uXWJ1PWcDS3OiW9Bw2w95xwRPVuUsdkbZH7v0gFPx3URFbX4fBC2S45ZJmGD4cciVoX7wvgLrH0zwiWOADmvH+YxmAkevOWFbWKFXsbKKm1FQvO2i8ugz5d0Z/p555D9HhDOg0NpPdEyInH6X'
+    assigned_environments:
+     - production
+     - development
+    email: 'maxim@mirny.name'
+    htpasswdmd5hash: '\$2y\$12\$twzUnRGRleJMB5aJ5DBlqOpH9c4C9F0qw2Zo/qXcSQpbVS3685Rjy'
+

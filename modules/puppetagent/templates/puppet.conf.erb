@@ -1,0 +1,20 @@
+[main]
+  server = <%= @puppetserver %>
+  environment = <%= @working_environment %>
+  confdir = /etc/puppetlabs/puppet/
+  reports = store,puppetdb
+[master]
+  vardir = /opt/puppetlabs/server/data/puppetserver
+  logdir = /var/log/puppetlabs/puppetserver
+  rundir = /var/run/puppetlabs/puppetserver
+  pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+  codedir = /etc/puppetlabs/code
+  certname = <%= @puppetserver %>
+  storeconfigs = true
+  storeconfigs_backend = puppetdb
+[agent]
+  report = true
+  reports = store,puppetdb
+  lastrunfile = /tmp/last_run_summary.yaml { owner = root, group = root, mode = 0644 }
+  show_diff = true
+  environment = <%= @working_environment %>

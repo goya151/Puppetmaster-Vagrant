@@ -1,0 +1,34 @@
+Origin: <%= @origin %>
+Label: <%= @label %>
+Suite: <%= @suite %>
+Codename: <%= @codename %>
+Architectures: <%= @architectures %>
+Components: <%= @components %>
+<% if @fakecomponentprefix -%>
+FakeComponentPrefix: <%= @fakecomponentprefix %>
+<% end -%>
+<% if @udebcomponents != "" -%>
+UDebComponents: <%= @udebcomponents %>
+<% end -%>
+Description: <%= @description %>
+DebIndices: <%= @deb_indices %>
+DscIndices: <%= @dsc_indices %>
+<% if @sign_with != "" -%>
+SignWith: <%= @sign_with %>
+<% end -%>
+<% if @uploaders != "" -%>
+Uploaders: <%= @uploaders %>
+<% end -%>
+<% if @update != "" -%>
+Update: <%= @update %>
+<% end -%>
+<% if @pull != "" -%>
+Pull: <%= @pull %>
+<% end -%>
+<% if @not_automatic != "" -%>
+NotAutomatic: <%= @not_automatic %>
+<% end -%>
+<% if @but_automatic_upgrades != "" -%>
+ButAutomaticUpgrades: <%= @but_automatic_upgrades %>
+<% end -%>
+

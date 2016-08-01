@@ -1,0 +1,4 @@
+---
+
+puppetagent::puppetserver: 'puppetmaster.dev'
+puppetagent::puppetdbserver: 'puppetmaster.dev'

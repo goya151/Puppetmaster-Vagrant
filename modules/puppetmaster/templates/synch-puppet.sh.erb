@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+#
+# Check & update production branch
+#
+REPO_DIR="/etc/puppetlabs/code/environments/production"
+if [ ! -d "$REPO_DIR/.git" ]; then
+  rm -rf $REPO_DIR
+  git clone git@github.com:styladev/puppet.git $REPO_DIR --branch production
+fi
+
+cd $REPO_DIR
+git fetch origin
+git pull origin production
+
+
+#
+# Check & update development branch
+#
+REPO_DIR="/etc/puppetlabs/code/environments/development"
+if [ ! -d "$REPO_DIR/.git" ]; then
+  rm -rf $REPO_DIR
+  git clone git@github.com:styladev/puppet.git $REPO_DIR --branch development
+fi
+
+cd $REPO_DIR
+git fetch origin
+git pull origin development

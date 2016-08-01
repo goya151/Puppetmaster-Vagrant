@@ -1,0 +1,6 @@
+---
+roles:
+ - java_role
+
+puppetagent::puppetserver: 'puppetmaster.dev'
+puppetagent::puppetdbserver: 'puppetmaster.dev'
