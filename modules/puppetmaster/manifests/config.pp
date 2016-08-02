@@ -29,6 +29,7 @@ class puppetmaster::config() {
     mode    => '0600'
   }
 
+  exec 
   service { 'puppetserver':
     enable      => true,
     ensure      => running,

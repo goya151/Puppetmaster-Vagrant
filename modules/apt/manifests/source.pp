@@ -7,7 +7,7 @@ define apt::source(
   $location          = '',
   $release           = 'UNDEF',
   $repos             = 'main',
-  $include_src       = false,
+  $include_src       = true,
   $include_deb       = true,
   $required_packages = false,
   $key               = undef,

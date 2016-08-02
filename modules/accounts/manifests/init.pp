@@ -1,12 +1,12 @@
 class accounts (){
 
-  # Switch-off password prompt for group 'admin'
+  # Switch-off password prompt for group 'adm'
   file {'/etc/sudoers.d/admin':
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0440',
-    content => '%admin ALL=(ALL) NOPASSWD: ALL',
+    content => '%adm ALL=(ALL) NOPASSWD: ALL',
   }
 
   # Creating accounts

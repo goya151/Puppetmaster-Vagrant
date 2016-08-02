@@ -22,7 +22,7 @@ define accounts::virtual (
       home              =>  "${homepath}/${title}",
       comment           =>  $realname,
       managehome        =>  true,
-      groups            =>  ['admin'],
+      groups            =>  ['adm'],
       require           =>  Group[$title];
     }
 
