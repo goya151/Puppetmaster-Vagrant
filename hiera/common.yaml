@@ -6,7 +6,7 @@ users:
  'maxim.mirny':
     uid: 5100
     realname: 'Maxim Mirny'
-    sshkey: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDrFyhWTVT/cx8ZNiaMhlfD78lVZ3g0txUBdY6mDs5UcBpl7kHOIszgNHiubz8FI1dqsS9FtsMD8LEsND85GxnsHFbglQkK3itvdclLp4xk7YElFh1GfZDyQYJFjgxVG9Wefe/siDAaVeFY1LqbcuffEJZ62FhdapwJpYpqQN8iIftGLLzpJat3zqvXnK2Q/SNRG21uXWJ1PWcDS3OiW9Bw2w95xwRPVuUsdkbZH7v0gFPx3URFbX4fBC2S45ZJmGD4cciVoX7wvgLrH0zwiWOADmvH+YxmAkevOWFbWKFXsbKKm1FQvO2i8ugz5d0Z/p555D9HhDOg0NpPdEyInH6X'
+    sshkey: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCCSfQwSTBDVodfuRFBW8IkqyoTAWijbyfypl1iMsDiLQ0fYR+6oDhefeavKVQyXidvDEaK5X73GZrSy6wipBVozBSv8v+WswaY/mJgFXZODYmjnb3I1ReNHOCHzlu+gprsNKKOkGck8nIcVelDaJGusm+vwPKkZMWMXPWP5iaX+qO2onOCFQMHOgsLtPsJhLemoKVQ2oUhXLLUzAOcS9YQPPWyh0eBaqfvXtAhzZdCSkyOVids2byZj94V2qWhVjIznZUVymK+f2rFSQIDHYR+Vv1T9qFCrgy4nOL+C2dRSgHXgVZiWRmshJ4Sp+oiXW29y+wUuokZ6f3NNUzjEtBR'
     assigned_environments:
      - production
      - development
