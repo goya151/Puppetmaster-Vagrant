@@ -29,7 +29,10 @@ class puppetmaster::config() {
     mode    => '0600'
   }
 
-  exec 
+  exec { 'Clean_ssl_folder':
+    command => '/bin/rm -rf /etc/puppetlabs/puppet/ssl',
+  }
+
   service { 'puppetserver':
     enable      => true,
     ensure      => running,
