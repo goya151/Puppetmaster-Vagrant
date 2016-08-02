@@ -12,10 +12,10 @@ class default_role () {
   include apt
 
   class { '::ntp':
-    servers => [ '0.amazon.pool.ntp.org', '1.amazon.pool.ntp.org', '2.amazon.pool.ntp.org' ],
+    servers => [ 'pool.ntp.org' ],
   }
 
-  package { ['iptables-persistent','git','htop', 'python-yaml', 'libnagios-plugin-perl', 'mc']:
+  package { [ 'git','htop', 'python-yaml', 'libnagios-plugin-perl', 'mc']:
     ensure => installed,
   }
 }
