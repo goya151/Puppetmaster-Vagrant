@@ -7,7 +7,7 @@
 class default_role () {
 
   class { '::puppet':
-    #runmode => 'cron'
+    runmode => 'cron'
   }
 
   include set_locales
