@@ -6,16 +6,19 @@
 
 class default_role () {
 
+  class { '::puppet':
+    #runmode => 'cron'
+  }
+
   include set_locales
   include accounts
-#  include puppetagent
   include apt
 
   class { '::ntp':
     servers => [ 'pool.ntp.org' ],
   }
 
-  package { [ 'git','htop', 'python-yaml', 'mc']:
+  package { [ 'vim', 'git', 'htop', 'python-yaml', 'mc']:
     ensure => installed,
   }
 }
