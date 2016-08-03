@@ -54,7 +54,7 @@ provision_puppet = -> (box, ip, role) {
     box.vm.provision "shell", inline: "
     echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
     echo Process is complete. Some information about this VM:
-    echo +++ IP information +++; echo $(ip a | grep 'eth' | grep 'inet' | cut -f1 -d '/' | grep '192' )
+    echo +++ IP information +++; echo $(ip a | grep 'inet' | cut -f1 -d '/' | grep '192' )
     echo +++ SSH information +++; echo vagrant ssh $(hostname | cut -f 1 -d '.')
     echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
     echo NOTE: VM is ready."
@@ -81,7 +81,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define 'puppetmaster' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
-#    box.vm.box_url= 'https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box'
     box.vm.host_name = 'puppetmaster.dev'
     box.vm.network "private_network", ip: "192.168.12.12"
     configure_providers.call(box, "puppetmaster", 4096, 4)
