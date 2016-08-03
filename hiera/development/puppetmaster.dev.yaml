@@ -1,6 +1,6 @@
 ---
 roles:
- - puppetmaster_role
+# - puppetmaster_role
 # - repository_server_role
 # - monitoring_server_role
 
