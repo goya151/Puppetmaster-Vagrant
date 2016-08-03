@@ -3,7 +3,7 @@
 ### First start:
 
 #### Install necessary dependencies
-VirtalBox - https://www.virtualbox.org/wiki/Downloads
+VirtualBox - https://www.virtualbox.org/wiki/Downloads
 Vagrant   - http://www.vagrantup.com/downloads.html
 
 For first start needs some time for download basebox from internet.
@@ -56,12 +56,12 @@ find /etc/puppetlabs/puppet/ssl -name hostname.magalog.net.pem -delete
 ```
 and after make a first start:
 ```
-puppet agent -t --server puppetmaster.magalog.net
+puppet agent -t --server puppetmaster.dev
 ```
 
 On puppet master sign a node:
 ```
-puppet cert sign hostname.magalog.net
+puppet cert sign hostname.dev
 ```
 and on the node start puppet provision again with environment:
 ```
