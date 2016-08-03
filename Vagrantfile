@@ -22,14 +22,9 @@ else
   #puppet_opts << "&>/dev/null"
 end
 
-provision_puppet = -> (box, ip, role) {
-    box.vm.provision "shell", inline: "
-    echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    echo Preparing the VM. This may take some time depending upon the setup.
-    echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-
-    # This is a fix to run puppet 4.5.3 with vagrant
-    box.vm.provision "shell", :inline => <<-SHELL
+# This is a fix to run puppet 4.5.3 with vagrant
+$script = <<SHELL
+      sudo timedatectl set-timezone UTC
       if [ ! -f /usr/bin/puppet ]; then
         dpkg --install - <(curl -o- http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb)
         sudo apt-get update
@@ -47,7 +42,15 @@ provision_puppet = -> (box, ip, role) {
         sudo apt-get install -y puppet-agent=1.5.3-1xenial
         sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
       fi
-    SHELL
+SHELL
+
+provision_puppet = -> (box, ip, role) {
+    box.vm.provision "shell", inline: "
+    echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    echo Preparing the VM. This may take some time depending upon the setup.
+    echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+    box.vm.provision "shell", inline: $script
 
     box.vm.provision "shell", args: [puppet_opts], inline: 'sudo puppet apply --modulepath /etc/puppetlabs/code/environments/development/modules:/etc/puppetlabs/code/environments/development/roles --hiera_config=/etc/puppetlabs/code/environments/development/hiera/hiera.yaml /etc/puppetlabs/code/environments/development/manifests/site.pp --environment=development $1'
 
@@ -57,7 +60,7 @@ provision_puppet = -> (box, ip, role) {
     echo +++ IP information +++; echo $(ip a | grep 'inet' | cut -f1 -d '/' | grep '192' )
     echo +++ SSH information +++; echo vagrant ssh $(hostname | cut -f 1 -d '.')
     echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
-    echo NOTE: VM is ready."
+    echo VM is ready."
 }
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
