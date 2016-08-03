@@ -8,14 +8,14 @@ class default_role () {
 
   include set_locales
   include accounts
-  include puppetagent
+#  include puppetagent
   include apt
 
   class { '::ntp':
     servers => [ 'pool.ntp.org' ],
   }
 
-  package { [ 'git','htop', 'python-yaml', 'libnagios-plugin-perl', 'mc']:
+  package { [ 'git','htop', 'python-yaml', 'mc']:
     ensure => installed,
   }
 }
