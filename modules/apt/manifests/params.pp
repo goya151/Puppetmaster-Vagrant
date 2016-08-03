@@ -12,7 +12,7 @@ class apt::params {
       'lsbdistrelease'      => $::lsbdistrelease,
       'lsbmajdistrelease'   => $::lsbmajdistrelease,
       'lsbdistdescription'  => $::lsbdistdescription,
-      'lsbminordistrelease' => $::lsbminordistrelease,
+#      'lsbminordistrelease' => $::lsbminordistrelease,
       'lsbdistid'           => $::lsbdistid,
     }
   } else {
