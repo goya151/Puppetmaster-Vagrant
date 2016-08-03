@@ -1,2 +1,2 @@
 ---
-puppetagent::working_environment: 'development'
+#puppetagent::working_environment: 'development'
