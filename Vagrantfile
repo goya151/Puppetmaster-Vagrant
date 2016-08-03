@@ -76,6 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #  config.ssh.forward_agent = true
 #  config.ssh.insert_key = 'true'
 #  config.ssh.private_key_path = "/home/maxim/.ssh/id_rsa"
+#  config.ssh.username = "puppet"
 
   config.proxy.http     = "http://172.17.100.196:8080"
   config.proxy.https    = "http://172.17.100.196:8080"
@@ -92,30 +93,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     provision_puppet.call(box, "192.168.12.12", "puppetmaster")
   end
 
-#  config.vm.define 'test-node01' do |box|
-#    box.vm.box = 'ubuntu/xenial64'
-#    box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/vivid/20150903/vivid-server-cloudimg-amd64-vagrant-disk1.box'
-#    box.vm.host_name = 'test-node01.dev'
-#    box.vm.network "private_network", ip: "192.168.12.13"
-#    configure_providers.call(box, "test-node01", 2048, 2)
-#    provision_puppet.call(box, "192.168.12.13", "test-node01")
-#  end
-
-#  config.vm.define 'test-node02' do |box|
-#    box.vm.box = 'ubuntu/xenial64'
-#    box.vm.box_url= 'https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box'
-#    box.vm.host_name = 'test-node02.dev'
-#    box.vm.network "private_network", ip: "192.168.12.14"
-#    configure_providers.call(box, "test-node02", 2048, 2)
-#    provision_puppet.call(box, "172.17.19.151", "test-node02")
-#  end
-
-#  config.vm.define 'test-node03' do |box|
-#    box.vm.box = 'ubuntu/xenial64'
-#    box.vm.box_url= 'https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box'
-#    box.vm.host_name = 'test-node03.dev'
-#    box.vm.network "private_network", ip: "192.168.12.15"
-#    configure_providers.call(box, "test-node03", 512, 2)
-#    provision_puppet.call(box, "192.168.12.15", "test-node03")
-#  end
+  config.vm.define 'test-node01' do |box|
+    box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
+    #box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/vivid/20150903/vivid-server-cloudimg-amd64-vagrant-disk1.box'
+    box.vm.host_name = 'test-node01.dev'
+    box.vm.network "private_network", ip: "192.168.12.13"
+    configure_providers.call(box, "test-node01", 1024, 1)
+    provision_puppet.call(box, "192.168.12.13", "test-node01")
+  end
 end
