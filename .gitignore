@@ -17,3 +17,4 @@ packer.log
 */*/files/*.tar
 /.idea/
 .idea
+old_modules

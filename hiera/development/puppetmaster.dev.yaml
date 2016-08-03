@@ -1,9 +1,10 @@
 ---
 roles:
- - puppetmaster_role
-# - repository_server_role
-# - monitoring_server_role
+  - puppetmaster_role
 
-puppetagent::puppetserver: 'puppetmaster.dev'
-puppetagent::puppetdbserver: 'puppetmaster.dev'
-#monitoring_server_role::mail_domain: 'localhost'
+#puppet::runmode: 'cron'
+puppet::server: true
+puppet::server_git_repo: false
+puppet::server_foreman: false
+puppet::server_reports: 'store'
+puppet::server_external_nodes: ''
