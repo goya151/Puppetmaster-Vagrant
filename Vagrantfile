@@ -3,6 +3,8 @@
 
 VAGRANTFILE_API_VERSION = "2"
 
+RUBY_DEP_GEM_SILENCE_WARNINGS=1
+
 configure_providers = -> (box, name, memory, cpus = 1) {
   box.vm.provider :virtualbox do |v|
      v.name = name
