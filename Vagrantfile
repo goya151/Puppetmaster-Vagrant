@@ -73,14 +73,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
-#  config.ssh.forward_agent = true
-#  config.ssh.insert_key = 'true'
+  config.ssh.forward_agent = false
+  config.ssh.insert_key = false
+
 #  config.ssh.private_key_path = "/home/maxim/.ssh/id_rsa"
 #  config.ssh.username = "puppet"
 
   config.proxy.http     = "http://172.17.100.196:8080"
   config.proxy.https    = "http://172.17.100.196:8080"
-  config.proxy.no_proxy = "localhost,127.0.0.1"
+  config.proxy.no_proxy = "localhost,127.0.0.1,192.168.0.0/24"
 
 
 #Configurations for servers
