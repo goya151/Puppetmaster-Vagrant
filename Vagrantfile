@@ -38,7 +38,7 @@ $script = <<SCRIPT
 
       # Check current puppet version
       VERSION=`/usr/bin/puppet --version`
-      if [ ! $VERSION = "4.5.1" ]; then
+      if [ ! $VERSION = "4.8.0" ]; then
         sudo apt-get -y purge puppet*
         cd /tmp
         wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
