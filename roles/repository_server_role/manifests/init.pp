@@ -23,7 +23,7 @@ class repository_server_role() {
     basedir => $basedir,
   }
 
-  reprepro::repository { 'styla':
+  reprepro::repository { 'dev':
     basedir => $basedir,
     options => ['basedir .'],
   }
@@ -31,24 +31,24 @@ class repository_server_role() {
   # Create a distribution within that repository
   reprepro::distribution { 'trusty':
     basedir       => $basedir,
-    repository    => 'styla',
-    origin        => 'styla',
-    label         => 'styla',
+    repository    => 'dev',
+    origin        => 'dev',
+    label         => 'dev',
     suite         => 'trusty',
     architectures => 'amd64 i386',
     components    => 'main contrib non-free',
-    description   => 'Package repository for styla related stuff',
-    sign_with     => 'admin@styla.com',
+    description   => 'Package repository',
+    sign_with     => 'admin@dev.com',
     not_automatic => 'No',
   }
 
   # Ensure your public key is accessible to download
-  file { '/var/lib/apt/repo/styla/styla.gpg':
+  file { '/var/lib/apt/repo/dev/dev.gpg':
     ensure => present,
     owner  => 'www-data',
     group  => 'reprepro',
     mode   => '0644',
-    source => 'puppet:///modules/repository_server_role/.gnupg/styla.gpg',
+    source => 'puppet:///modules/repository_server_role/.gnupg/dev.gpg',
   }
 
   file { '/root/.gnupg':

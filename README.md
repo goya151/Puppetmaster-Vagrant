@@ -35,7 +35,7 @@ By default all regular outgput will be redirected to '/dev/null'
    config.vm.define 'test-server' do |box|
     box.vm.box = 'trusty64'                                     #name of basebox
     box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
-    box.vm.host_name = 'test-server.styla.dev'                  #hostname
+    box.vm.host_name = 'test-server.dev'                        #hostname
     box.vm.network "private_network", ip: "192.168.12.12"       #network configuration
     configure_providers.call(box, "test-server", 1024, 2)       #configuration for providers
     provision_puppet.call(box, "192.168.12.12", "test-server")  #configuration for puppet
