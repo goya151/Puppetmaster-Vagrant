@@ -25,26 +25,27 @@ else
 end
 
 # This is a fix to run puppet 4.5.3 with vagrant
-$script = <<SHELL
+$script = <<SCRIPT
       sudo timedatectl set-timezone UTC
       if [ ! -f /usr/bin/puppet ]; then
         dpkg --install - <(curl -o- http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb)
         sudo apt-get update
-        sudo apt-get install -y puppet-agent=1.5.3-1xenial
-        sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
+        sudo apt-get install -y puppet-agent=1.8.0-1xenial
+        #sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
       fi
 
       # check current puppet version
       VERSION=`/usr/bin/puppet --version`
       if [ ! $VERSION = "4.5.3" ]; then
-        sudo apt-get -y purge puppet-common puppet
+        sudo apt-get -y purge puppet*
+        cd /tmp
         wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
-        sudo apt-get install ./puppetlabs-release-pc1-xenial.deb
+        sudo apt-get install /tmp/puppetlabs-release-pc1-xenial.deb
         sudo apt-get update
-        sudo apt-get install -y puppet-agent=1.5.3-1xenial
-        sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
+        sudo apt-get install -y puppet-agent=1.8.0-1xenial
+        #sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
       fi
-SHELL
+SCRIPT
 
 provision_puppet = -> (box, ip, role) {
     box.vm.provision "shell", inline: "
@@ -74,10 +75,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
   config.ssh.forward_agent = false
-  config.ssh.insert_key = false
 
-#  config.ssh.private_key_path = "/home/maxim/.ssh/id_rsa"
-#  config.ssh.username = "puppet"
+  config.ssh.insert_key = false
+  #config.ssh.username = 'vagrant'
+  #config.ssh.password = 'vagrant'
+  #config.ssh.private_key_path = "/home/maxim/.ssh/id_rsa"
 
   #Here place for setting of your proxy server
   #config.proxy.http     = "http://172.17.100.196:8080"
