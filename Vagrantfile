@@ -24,19 +24,21 @@ else
   #puppet_opts << "&>/dev/null"
 end
 
-# This is a fix to run puppet 4.8.0 with vagrant
 $script = <<SCRIPT
       sudo timedatectl set-timezone UTC
       if [ ! -f /usr/bin/puppet ]; then
-        dpkg --install - <(curl -o- http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb)
+        #dpkg --force-all --install - <(curl -o- http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb)
+        cd /tmp
+        wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
+        sudo dpkg --force-all -i /tmp/puppetlabs-release-pc1-xenial.deb
         sudo apt-get update
         sudo apt-get install -y puppet-agent=1.8.0-1xenial
-        #sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
+        sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
       fi
 
-      # check current puppet version
+      # Check current puppet version
       VERSION=`/usr/bin/puppet --version`
-      if [ ! $VERSION = "4.8.0" ]; then
+      if [ ! $VERSION = "4.5.1" ]; then
         sudo apt-get -y purge puppet*
         cd /tmp
         wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
