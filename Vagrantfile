@@ -24,7 +24,7 @@ else
   #puppet_opts << "&>/dev/null"
 end
 
-# This is a fix to run puppet 4.5.3 with vagrant
+# This is a fix to run puppet 4.8.0 with vagrant
 $script = <<SCRIPT
       sudo timedatectl set-timezone UTC
       if [ ! -f /usr/bin/puppet ]; then
@@ -36,7 +36,7 @@ $script = <<SCRIPT
 
       # check current puppet version
       VERSION=`/usr/bin/puppet --version`
-      if [ ! $VERSION = "4.5.3" ]; then
+      if [ ! $VERSION = "4.8.0" ]; then
         sudo apt-get -y purge puppet*
         cd /tmp
         wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
