@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 RUBY_DEP_GEM_SILENCE_WARNINGS=1
 
-configure_providers = -> (box, name, memory, cpus = 1) {
+configure_providers = -> (box, name, memory, cpus = 2) {
   box.vm.provider :virtualbox do |v|
      v.name = name
      v.memory = memory
@@ -16,38 +16,36 @@ configure_providers = -> (box, name, memory, cpus = 1) {
 # external env vars
 puppet_opts =  ENV["PUPPET_OPTIONS"] || ""
 
-if ENV["PUPPET_DEBUG"] == "1"
-  # regular output
-elsif ENV["PUPPET_DEBUG"] == "2"
+if ENV["PUPPET_DEBUG"] == "1"         # regular output
+elsif ENV["PUPPET_DEBUG"] == "2"      # debug output
   puppet_opts << " --verbose --debug"
 else
-  #puppet_opts << "&>/dev/null"
+  puppet_opts << "--logdest /dev/null" # Silent output
 end
 
-$script = <<SCRIPT
-      sudo timedatectl set-timezone UTC
+$script = <<-SHELL
+      timedatectl set-timezone UTC
       if [ ! -f /usr/bin/puppet ]; then
-        #dpkg --force-all --install - <(curl -o- http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb)
         cd /tmp
         wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
-        sudo dpkg --force-all -i /tmp/puppetlabs-release-pc1-xenial.deb
-        sudo apt-get update
-        sudo apt-get install -y puppet-agent=1.8.0-1xenial
-        sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
+        dpkg --force-all -i /tmp/puppetlabs-release-pc1-xenial.deb
+        apt-get update
+        apt-get install -y puppet-agent=1.8.0-1xenial
+        ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
       fi
 
       # Check current puppet version
       VERSION=`/usr/bin/puppet --version`
       if [ ! $VERSION = "4.8.0" ]; then
-        sudo apt-get -y purge puppet*
+        apt-get -y purge puppet*
         cd /tmp
         wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
-        sudo apt-get install /tmp/puppetlabs-release-pc1-xenial.deb
-        sudo apt-get update
-        sudo apt-get install -y puppet-agent=1.8.0-1xenial
-        #sudo ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
+        apt-get install /tmp/puppetlabs-release-pc1-xenial.deb
+        apt-get update
+        apt-get install -y puppet-agent=1.8.0-1xenial
+        #ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
       fi
-SCRIPT
+SHELL
 
 provision_puppet = -> (box, ip, role) {
     box.vm.provision "shell", inline: "
@@ -62,7 +60,7 @@ provision_puppet = -> (box, ip, role) {
     box.vm.provision "shell", inline: "
     echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
     echo Process is complete. Some information about this VM:
-    echo +++ IP information +++; echo $(ip a | grep 'inet' | cut -f1 -d '/' | grep '192' )
+    echo +++ IP  information +++; echo $(ip a | grep 'inet' | cut -f1 -d '/' | grep '192' )
     echo +++ SSH information +++; echo vagrant ssh $(hostname | cut -f 1 -d '.')
     echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
     echo VM is ready."
@@ -95,7 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'puppetmaster.dev'
     box.vm.network "private_network", ip: "192.168.12.12"
-    configure_providers.call(box, "puppetmaster", 4096, 4)
+    configure_providers.call(box, "puppetmaster", 2048, 2)
     provision_puppet.call(box, "192.168.12.12", "puppetmaster")
   end
 
@@ -104,7 +102,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/vivid/20150903/vivid-server-cloudimg-amd64-vagrant-disk1.box'
     box.vm.host_name = 'test-node01.dev'
     box.vm.network "private_network", ip: "192.168.12.13"
-    configure_providers.call(box, "test-node01", 1024, 1)
+    configure_providers.call(box, "test-node01", 1024, 2)
     provision_puppet.call(box, "192.168.12.13", "test-node01")
   end
 end
