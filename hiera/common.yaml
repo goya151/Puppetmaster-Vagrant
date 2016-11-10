@@ -4,7 +4,7 @@ roles:
 
 users:
  'maxim.mirny':
-    uid: 5100
+    uid: 6100
     realname: 'Maxim Mirny'
     sshkey: 'AAAAB3NzaC1yc2EAAAADAQABAAACAQDHa78IsZkDjIcAIP99Kwpk7Gk3rHItJ0GAoaggD1v\+qb9Hgjtm2GacWinlhWco5ATghgEYOx6Dkehtm2u1HXecEwGDtLvCd8ssKn43Vx4LUh6RSn7Wi\+JYvTAWeh1rhtdWSbDYsEsbyqmNShWEKiFYQk0maWMg0Z\+GiYDMxTEgWCFDiLmlukJF17JsiD04DWpXYCKexqbxkOdYTx\/AtGA72cUfuibAXJkMy4D0KarG1K8K+5JAQcX1dE7SGDE\/1imbb7Ip+Ny7VexeiNzT9XwCry2IoBl6SvmdpvB8WLQvJEPvf9Fcc835zTpfhUsOm0arQT3q0vOBqYlHJzVx\+Z5Mnt7WBZLNvGF1itdVeh34jg4ai7lj5RbpCnzsTjSUCUdFV8GtbRSxhutlXkcCaB8ybA5mK\/DEcVWGOHoRM1AJO+l9n\/cvsIa+Ko2T9XRB1xtRMg4cALYmZAv6T4C\/GduKUMpoEcD9LoTa+IfZ1r15p2jLC8SRZ8PazwcpdEwrN2BffnYHk6SbiP8L1PIutA\/\/sMIPK+xyM9ny7eTl7F3lO2xEv\/1Z1vUXd4RRF3zW8ZgET5Ng3q\/uyoE4DArRzMTTkgz8uoNsVmN03pow6nfAwMj27ko0aUwb6slWvc1YJQ9HRjencha7CBkj5DNpx0yHA47R7sGTb94D2jAQv9s31Q=='
     assigned_environments:
