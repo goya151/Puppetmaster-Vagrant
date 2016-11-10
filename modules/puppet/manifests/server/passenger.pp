@@ -6,6 +6,7 @@ class puppet::server::passenger (
   $app_root                = $::puppet::server::app_root,
   $passenger_min_instances = $::puppet::server::passenger_min_instances,
   $passenger_pre_start     = $::puppet::server::passenger_pre_start,
+  $passenger_ruby          = $::puppet::server::passenger_ruby,
   $port                    = $::puppet::server::port,
   $ssl_ca_cert             = $::puppet::server::ssl_ca_cert,
   $ssl_ca_crl              = $::puppet::server::ssl_ca_crl,
@@ -18,13 +19,19 @@ class puppet::server::passenger (
   $http                    = $::puppet::server::http,
   $http_port               = $::puppet::server::http_port,
   $http_allow              = $::puppet::server::http_allow,
+  $confdir                 = $::puppet::server::dir,
+  $rack_arguments          = $::puppet::server::rack_arguments,
+  $vardir                  = $::puppet::vardir,
 ) {
   include ::apache
   include ::apache::mod::passenger
 
   class { '::puppet::server::rack':
-    app_root => $app_root,
-    user     => $user,
+    app_root       => $app_root,
+    confdir        => $confdir,
+    rack_arguments => $rack_arguments,
+    user           => $user,
+    vardir         => $vardir,
   }
 
   case $::operatingsystem {
@@ -106,6 +113,7 @@ class puppet::server::passenger (
     options                 => ['None'],
     passenger_pre_start     => $https_pre_start,
     passenger_min_instances => $passenger_min_instances,
+    passenger_ruby          => $passenger_ruby,
     require                 => Class['::puppet::server::rack'],
   }
 
@@ -131,6 +139,7 @@ class puppet::server::passenger (
       docroot                 => "${app_root}/public/",
       directories             => $directories_http,
       port                    => $http_port,
+      ssl_proxyengine         => $ssl_proxyengine,
       custom_fragment         => join([
           $custom_fragment ? {
             undef   => '',
@@ -142,6 +151,7 @@ class puppet::server::passenger (
       options                 => ['None'],
       passenger_pre_start     => $http_pre_start,
       passenger_min_instances => $passenger_min_instances,
+      passenger_ruby          => $passenger_ruby,
       require                 => Class['::puppet::server::rack'],
     }
   }

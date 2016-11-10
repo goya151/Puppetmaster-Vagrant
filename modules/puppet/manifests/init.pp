@@ -41,7 +41,6 @@
 #                                     Can also install only server packages with value
 #                                     of 'server' or only agent packages with 'agent'.
 #                                     Defaults to true
-#                                     type:string
 #
 # $package_provider::                 The provider used to install the agent.
 #                                     Defaults to chocolatey on Windows
@@ -96,6 +95,11 @@
 #                                     an autosign script. If this is set to a script, make
 #                                     sure that script considers the content of autosign.conf
 #                                     as otherwise Foreman functionality might be broken.
+#
+# $autosign_entries::                 A list of certnames or domain name globs
+#                                     whose certificate requests will automatically be signed.
+#                                     Defaults to an empty Array.
+#                                     type: array
 #
 # $autosign_mode::                    mode of the autosign file/script
 #
@@ -196,7 +200,7 @@
 #
 # $client_package::                   Install a custom package to provide
 #                                     the puppet client
-#                                     type:string
+#                                     type:array
 #
 # $puppetmaster::                     Hostname of your puppetmaster (server
 #                                     directive in puppet.conf)
@@ -330,9 +334,8 @@
 # $server_envs_dir::                  Directory that holds puppet environments
 #                                     type:string
 #
-# $server_manifest_path::             Path to puppet site.pp manifest (only when
-#                                     $server_git_repo_path and $server_dynamic_environments
-#                                     are false)
+# $server_envs_target::               Indicates that $envs_dir should be
+#                                     a symbolic link to this target
 #                                     type:string
 #
 # $server_common_modules_path::       Common modules paths (only when
@@ -431,6 +434,11 @@
 #                                     process during httpd start.
 #                                     type:boolean
 #
+# $server_passenger_ruby::            The PassengerRuby parameter. Sets the Ruby
+#                                     interpreter for serving the puppetmaster
+#                                     rack application.
+#                                     type:string
+#
 # $server_config_version::            How to determine the configuration version. When
 #                                     using git_repo, by default a git describe
 #                                     approach will be installed.
@@ -526,6 +534,9 @@
 #                                     configuration section. This is necessary to
 #                                     disable in case CA is delegated to a separate instance
 #                                     type:boolean
+#
+# $server_puppetserver_vardir::       The path of the puppetserver var dir
+#                                     type:string
 #
 # $server_puppetserver_dir::          The path of the puppetserver config dir
 #                                     type:string
@@ -623,6 +634,7 @@ class puppet (
   $splay                           = $puppet::params::splay,
   $splaylimit                      = $puppet::params::splaylimit,
   $autosign                        = $puppet::params::autosign,
+  $autosign_entries                = $puppet::params::autosign_entries,
   $autosign_mode                   = $puppet::params::autosign_mode,
   $runinterval                     = $puppet::params::runinterval,
   $usecacheonfailure               = $puppet::params::usecacheonfailure,
@@ -679,10 +691,12 @@ class puppet (
   $server_implementation           = $puppet::params::server_implementation,
   $server_passenger                = $puppet::params::server_passenger,
   $server_puppetserver_dir         = $puppet::params::server_puppetserver_dir,
+  $server_puppetserver_vardir      = $puppet::params::server_puppetserver_vardir,
   $server_puppetserver_version     = $puppet::params::server_puppetserver_version,
   $server_service_fallback         = $puppet::params::server_service_fallback,
   $server_passenger_min_instances  = $puppet::params::server_passenger_min_instances,
   $server_passenger_pre_start      = $puppet::params::server_passenger_pre_start,
+  $server_passenger_ruby           = $puppet::params::server_passenger_ruby,
   $server_httpd_service            = $puppet::params::server_httpd_service,
   $server_external_nodes           = $puppet::params::server_external_nodes,
   $server_template                 = $puppet::params::server_template,
@@ -702,7 +716,7 @@ class puppet (
   $server_environments_group       = $puppet::params::server_environments_group,
   $server_environments_mode        = $puppet::params::server_environments_mode,
   $server_envs_dir                 = $puppet::params::server_envs_dir,
-  $server_manifest_path            = $puppet::params::server_manifest_path,
+  $server_envs_target              = $puppet::params::server_envs_target,
   $server_common_modules_path      = $puppet::params::server_common_modules_path,
   $server_git_repo_mode            = $puppet::params::server_git_repo_mode,
   $server_git_repo_path            = $puppet::params::server_git_repo_path,
@@ -795,5 +809,11 @@ class puppet (
   if $server == true {
     include ::puppet::server
     Class['puppet::server'] -> Class['puppet']
+  }
+
+  # Ensure the server is running before the agent needs it, and that
+  # certificates are generated in the server config (if enabled)
+  if $server == true and $agent == true {
+    Class['puppet::server'] -> Class['puppet::agent::service']
   }
 }
