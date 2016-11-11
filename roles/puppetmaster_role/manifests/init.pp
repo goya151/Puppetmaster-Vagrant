@@ -4,6 +4,6 @@
 
 class puppetmaster_role () {
 
-  include puppetdb
+#  class { 'puppetdb::master::config': }
 
 }
