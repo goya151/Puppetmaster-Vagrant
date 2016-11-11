@@ -5,7 +5,10 @@ roles:
 puppet::runmode: 'cron'
 puppet::server: true
 puppet::server_http: true
+#puppet::server_puppetdb_host: puppetmaster.dev
 puppet::server_git_repo: false
 puppet::server_foreman: false
 puppet::server_reports: 'store'
 puppet::server_external_nodes: ''
+puppet::server_reports: 'store'
+puppet::server_storeconfigs_backend: 'store'
