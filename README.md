@@ -9,15 +9,15 @@ Vagrant   - http://www.vagrantup.com/downloads.html
 For first start needs some time for download basebox from internet.
 
 Usefull commands:<br />
-+ status<pre><pre>outputs status of the vagrant machine<br />
-+ suspend<pre><pre>suspends the machine<br />
-+ halt<pre><pre>stops the vagrant machine<br />
-+ up<pre><pre>starts and provisions the vagrant environment<br />
-+ ssh<pre><pre>connects to machine via SSH<br />
-+ destroy<pre><pre>stops and deletes all traces of the vagrant machine<br />
-+ provision<pre><pre>provisions the vagrant machine<br />
-+ reload<pre><pre>restarts vagrant machine, loads new Vagrantfile configuration<br />
-+ resume<pre><pre>resume a suspended vagrant machine<br />
++ status<pre>outputs status of the vagrant machine<br />
++ suspend<pre>suspends the machine<br />
++ halt<pre>stops the vagrant machine<br />
++ up<pre>starts and provisions the vagrant environment<br />
++ ssh<pre>connects to machine via SSH<br />
++ destroy<pre>stops and deletes all traces of the vagrant machine<br />
++ provision<pre>provisions the vagrant machine<br />
++ reload<pre>restarts vagrant machine, loads new Vagrantfile configuration<br />
++ resume<pre>resume a suspended vagrant machine<br />
 
 ### Debug mode:
 For debug mode you can use parameters before command 'vagrant':
