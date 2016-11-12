@@ -8,23 +8,23 @@ Vagrant   - http://www.vagrantup.com/downloads.html
 
 For first start needs some time for download basebox from internet.
 
-Usefull commands:
-     status          outputs status of the vagrant machine
-     suspend         suspends the machine
-     halt            stops the vagrant machine
-     up              starts and provisions the vagrant environment
-     ssh             connects to machine via SSH
-     destroy         stops and deletes all traces of the vagrant machine
-     provision       provisions the vagrant machine
-     reload          restarts vagrant machine, loads new Vagrantfile configuration
-     resume          resume a suspended vagrant machine
+Usefull commands:<br />
+     status          outputs status of the vagrant machine<br />
+     suspend         suspends the machine<br />
+     halt            stops the vagrant machine<br />
+     up              starts and provisions the vagrant environment<br />
+     ssh             connects to machine via SSH<br />
+     destroy         stops and deletes all traces of the vagrant machine<br />
+     provision       provisions the vagrant machine<br />
+     reload          restarts vagrant machine, loads new Vagrantfile configuration<br />
+     resume          resume a suspended vagrant machine<br />
 
 ### Debug mode:
 For debug mode you can use parameters before command 'vagrant':
 - PUPPET_DEBUG=1   - Display all regular output
 - PUPPET_DEBUG=2   - Display all messages with "--verbose" and "--debug" keys
 
-By default all regular outgput will be redirected to '/dev/null'
+By default all regular output will be redirected to '/dev/null'
 
 #### Vagrantfile
 
@@ -52,12 +52,13 @@ hostname -f
 ```
   clean old sertificates from puppet folders:
 ```
-find /etc/puppetlabs/puppet/ssl -name hostname.magalog.net.pem -delete
+find /etc/puppetlabs/puppet/ssl -name hostname.dev.pem -delete
 ```
 and after make a first start:
 ```
-puppet agent -t --server puppetmaster.dev
+puppet agent -t --server puppetmaster.dev  #After last changes server name is already in agent configs
 ```
+
 
 On puppet master sign a node:
 ```
