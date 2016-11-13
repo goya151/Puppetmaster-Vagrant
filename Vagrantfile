@@ -93,9 +93,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'puppetmaster.dev'
     box.vm.network "public_network", use_dhcp_assigned_default_route: true
-#ip: "192.168.12.12"
     configure_providers.call(box, "puppetmaster.dev", 8196, 16)
     provision_puppet.call(box, "192.168.12.12", "puppetmaster")
+  end
+
+  config.vm.define 'repository-server.dev' do |box|
+    box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
+    box.vm.host_name = 'repository-server.dev'
+    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+    configure_providers.call(box, "repository-server.dev", 2048, 16)
+    provision_puppet.call(box, "192.168.12.30", "repository-server")
   end
 
   config.vm.define 'test-node01' do |box|
@@ -112,18 +119,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'test-node02.dev'
     box.vm.network "public_network", use_dhcp_assigned_default_route: true
-#ip: "192.168.12.14"
     configure_providers.call(box, "test-node02.dev", 2048, 16)
-    provision_puppet.call(box, "192.168.12.13", "test-node02")
-  end
+    provision_puppet.call(box, "192.168.12.14", "test-node02")
 
+  end
   config.vm.define 'test-node03' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'test-node03.dev'
     box.vm.network "public_network", use_dhcp_assigned_default_route: true
-#ip: "192.168.12.15"
-    configure_providers.call(box, "test-node03.dev", 10240, 16)
-    provision_puppet.call(box, "192.168.12.13", "test-node03")
+    configure_providers.call(box, "test-node03.dev", 2048, 16)
+    provision_puppet.call(box, "192.168.12.15", "test-node02")
   end
 
 end
