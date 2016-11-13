@@ -92,8 +92,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'puppetmaster' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'puppetmaster.dev'
-    box.vm.network "private_network", ip: "192.168.12.12"
-    configure_providers.call(box, "puppetmaster.dev", 8196, 8)
+    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+#ip: "192.168.12.12"
+    configure_providers.call(box, "puppetmaster.dev", 8196, 16)
     provision_puppet.call(box, "192.168.12.12", "puppetmaster")
   end
 
@@ -101,7 +102,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     #box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/vivid/20150903/vivid-server-cloudimg-amd64-vagrant-disk1.box'
     box.vm.host_name = 'test-node01.dev'
-    box.vm.network "private_network", ip: "192.168.12.13"
+    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+#ip: "192.168.12.13"
     configure_providers.call(box, "test-node01.dev", 512, 8)
     provision_puppet.call(box, "192.168.12.13", "test-node01")
   end
@@ -109,16 +111,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'test-node02' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'test-node02.dev'
-    box.vm.network "private_network", ip: "192.168.12.14"
-    configure_providers.call(box, "test-node02.dev", 2048, 8)
+    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+#ip: "192.168.12.14"
+    configure_providers.call(box, "test-node02.dev", 2048, 16)
     provision_puppet.call(box, "192.168.12.13", "test-node02")
   end
 
   config.vm.define 'test-node03' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'test-node03.dev'
-    box.vm.network "private_network", ip: "192.168.12.15"
-    configure_providers.call(box, "test-node03.dev", 2048, 8)
+    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+#ip: "192.168.12.15"
+    configure_providers.call(box, "test-node03.dev", 10240, 16)
     provision_puppet.call(box, "192.168.12.13", "test-node03")
   end
 
