@@ -1,6 +1,6 @@
 {
   "name": "jtopjian-reprepro",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "author": "jtopjian, saz, camptocamp",
   "summary": "Assists in the creation of reprepro-based repositories",
   "license": "Apache 2.0",

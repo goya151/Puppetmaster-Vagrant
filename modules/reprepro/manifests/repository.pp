@@ -40,6 +40,7 @@ define reprepro::repository (
   ) {
 
   include reprepro::params
+  include concat::setup
 
   file { "${basedir}/${name}":
     ensure  => $ensure ? { 'present' => 'directory', default => $ensure,},
@@ -144,6 +145,7 @@ define reprepro::repository (
     owner   => $owner,
     group   => $group,
     mode    => '0640',
+    force   => true, 
     require => File["${basedir}/${name}/conf"],
   }
 
@@ -151,6 +153,7 @@ define reprepro::repository (
     owner   => root,
     group   => root,
     mode    => '0644',
+    force   => true,
     require => File["${basedir}/${name}/conf"],
   }
 

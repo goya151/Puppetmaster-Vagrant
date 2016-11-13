@@ -47,6 +47,7 @@ define reprepro::update (
 ) {
 
   include reprepro::params
+  include concat::setup
 
   if $filter_name != '' {
     if $filter_action == '' {

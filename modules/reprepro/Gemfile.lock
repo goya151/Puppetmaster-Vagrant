@@ -50,3 +50,6 @@ DEPENDENCIES
   puppetlabs_spec_helper
   rspec (< 2.99)
   rspec-puppet!
+
+BUNDLED WITH
+   1.10.3
