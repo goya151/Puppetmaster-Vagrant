@@ -9,9 +9,9 @@ class repository_server_role() {
 
   ensure_packages('apache2')
 
-  file { '/etc/apache2/sites-enabled/25-apt.magalog.net.conf':
+  file { '/etc/apache2/sites-enabled/25-apt.dev.net.conf':
     ensure => present,
-    source => 'puppet:///modules/repository_server_role/25-apt.magalog.net.conf',
+    source => 'puppet:///modules/repository_server_role/25-apt.dev.net.conf',
   }
 
   file { '/etc/apache2/.htpasswd':
