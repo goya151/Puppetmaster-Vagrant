@@ -5,6 +5,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 RUBY_DEP_GEM_SILENCE_WARNINGS=1
 
+Vagrant.require_version ">= 1.8.7"
+
 configure_providers = -> (box, name, memory, cpus = 2) {
   box.vm.provider :virtualbox do |v|
      v.name = name
@@ -94,41 +96,41 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.host_name = 'puppetmaster.dev'
     box.vm.network "public_network", use_dhcp_assigned_default_route: true
     configure_providers.call(box, "puppetmaster.dev", 8196, 16)
-    provision_puppet.call(box, "192.168.12.12", "puppetmaster")
+    provision_puppet.call(box, "192.168.245.50", "puppetmaster")
   end
 
-  config.vm.define 'repository-server.dev' do |box|
+  config.vm.define 'repository' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
-    box.vm.host_name = 'repository-server.dev'
+    box.vm.host_name = 'repository.dev'
     box.vm.network "public_network", use_dhcp_assigned_default_route: true
-    configure_providers.call(box, "repository-server.dev", 2048, 16)
-    provision_puppet.call(box, "192.168.12.30", "repository-server")
+    configure_providers.call(box, "repository.dev", 2048, 16)
+    provision_puppet.call(box, "192.168.245.51", "repository-server")
   end
 
   config.vm.define 'test-node01' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     #box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/vivid/20150903/vivid-server-cloudimg-amd64-vagrant-disk1.box'
     box.vm.host_name = 'test-node01.dev'
-    box.vm.network "public_network", use_dhcp_assigned_default_route: true
-#ip: "192.168.12.13"
+    box.vm.network "public_network", ip: "192.168.245.52"
+#use_dhcp_assigned_default_route: true
     configure_providers.call(box, "test-node01.dev", 512, 8)
-    provision_puppet.call(box, "192.168.12.13", "test-node01")
+    provision_puppet.call(box, "192.168.245.52", "test-node01")
   end
 
   config.vm.define 'test-node02' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'test-node02.dev'
-    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+    box.vm.network "public_network", ip: "192.168.245.53"
     configure_providers.call(box, "test-node02.dev", 2048, 16)
-    provision_puppet.call(box, "192.168.12.14", "test-node02")
+    provision_puppet.call(box, "192.168.245.53", "test-node02")
 
   end
   config.vm.define 'test-node03' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'test-node03.dev'
-    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+    box.vm.network "public_network", ip: "192.168.245.54"
     configure_providers.call(box, "test-node03.dev", 2048, 16)
-    provision_puppet.call(box, "192.168.12.15", "test-node02")
+    provision_puppet.call(box, "192.168.245.54", "test-node03")
   end
 
 end
