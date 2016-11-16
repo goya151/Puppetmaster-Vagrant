@@ -7,6 +7,7 @@ RUBY_DEP_GEM_SILENCE_WARNINGS=1
 
 Vagrant.require_version ">= 1.8.7"
 
+
 configure_providers = -> (box, name, memory, cpus = 2) {
   box.vm.provider :virtualbox do |v|
      v.name = name
@@ -15,58 +16,22 @@ configure_providers = -> (box, name, memory, cpus = 2) {
   end
 }
 
+
 # external env vars
 puppet_opts =  ENV["PUPPET_OPTIONS"] || ""
 
-if ENV["PUPPET_DEBUG"] == "1"         # regular output
-elsif ENV["PUPPET_DEBUG"] == "2"      # debug output
-  puppet_opts << " --verbose --debug"
+if ENV["PUPPET_DEBUG"] == "1"          # regular output
+elsif ENV["PUPPET_DEBUG"] == "2"
+  puppet_opts << " --verbose --debug"  # debug output
 else
-  puppet_opts << "--logdest /dev/null" # Silent output
+  puppet_opts << "--logdest /dev/null" # silent output
 end
 
-$script = <<-SHELL
-      timedatectl set-timezone UTC
-      if [ ! -f /usr/bin/puppet ]; then
-        cd /tmp
-        wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
-        dpkg --force-all -i /tmp/puppetlabs-release-pc1-xenial.deb
-        apt-get update
-        apt-get install -y puppet-agent=1.8.0-1xenial
-        ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
-      fi
-
-      # Check current puppet version
-      VERSION=`/usr/bin/puppet --version`
-      if [ ! $VERSION = "4.8.0" ]; then
-        apt-get -y purge puppet*
-        cd /tmp
-        wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
-        apt-get install /tmp/puppetlabs-release-pc1-xenial.deb
-        apt-get update
-        apt-get install -y puppet-agent=1.8.0-1xenial
-        #ln -s /opt/puppetlabs/bin/puppet  /usr/bin/puppet
-      fi
-SHELL
 
 provision_puppet = -> (box, ip, role) {
-    box.vm.provision "shell", inline: "
-    echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    echo Preparing the VM. This may take some time depending upon the setup.
-    echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-
-    box.vm.provision "shell", inline: $script
-
-    box.vm.provision "shell", args: [puppet_opts], inline: 'sudo puppet apply --modulepath /etc/puppetlabs/code/environments/development/modules:/etc/puppetlabs/code/environments/development/roles --hiera_config=/etc/puppetlabs/code/environments/development/hiera/hiera.yaml /etc/puppetlabs/code/environments/development/manifests/site.pp --environment=development $1'
-
-    box.vm.provision "shell", inline: "
-    echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
-    echo Process is complete. Some information about this VM:
-    echo +++ IP  information +++; echo $(ip a | grep 'inet' | cut -f1 -d '/' | grep '192' )
-    echo +++ SSH information +++; echo vagrant ssh $(hostname | cut -f 1 -d '.')
-    echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
-    echo VM is ready."
+    box.vm.provision "shell", args: [puppet_opts], path: "provision.sh"
 }
+
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -87,6 +52,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.proxy.http     = "http://172.17.100.196:8080"
   #config.proxy.https    = "http://172.17.100.196:8080"
   #config.proxy.no_proxy = "localhost,127.0.0.1,192.168.0.0/24"
+
+  #config.vm.provision "puppet" do |puppet|
+#      puppet.module_path = "modules"
+#      puppet.module_path = "roles"
+#      puppet.manifest_file = "site.pp"
+#      puppet.hiera_config_path = "./hiera/hiera.yaml ./manifests/site.pp"
+#      puppet.environment = "development"
+#      puppet.options = "--verbose --debug"
+#  end
 
 
 #Configurations for servers
@@ -111,8 +85,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     #box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/vivid/20150903/vivid-server-cloudimg-amd64-vagrant-disk1.box'
     box.vm.host_name = 'test-node01.dev'
-    box.vm.network "public_network", ip: "192.168.245.52"
-#use_dhcp_assigned_default_route: true
+    box.vm.network "public_network", ip: "192.168.245.52" #use_dhcp_assigned_default_route: true
     configure_providers.call(box, "test-node01.dev", 512, 8)
     provision_puppet.call(box, "192.168.245.52", "test-node01")
   end
