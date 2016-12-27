@@ -22,16 +22,29 @@ puppet_opts =  ENV["PUPPET_OPTIONS"] || ""
 
 if ENV["PUPPET_DEBUG"] == "1"          # regular output
 elsif ENV["PUPPET_DEBUG"] == "2"
-  puppet_opts << " --verbose --debug"  # debug output
+  puppet_opts << "--verbose --debug"   # debug output
 else
   puppet_opts << "--logdest /dev/null" # silent output
 end
 
 
-provision_puppet = -> (box, ip, role) {
-    box.vm.provision "shell", args: [puppet_opts], path: "provision.sh"
-}
+#provision_puppet = -> (box, ip, role) {
+#    box.vm.provision "shell", args: [puppet_opts], path: "provision.sh"
+#}
 
+provision_puppet = -> (box, ip, role) {
+  box.vm.provision "puppet" do |puppet|
+    puppet.environment = 'development'
+    puppet.module_path = ["manifests", "shared/modules", "roles", "custom/modules"]
+    puppet.manifest_file = "site.pp"
+    puppet.manifests_path = "manifests"
+    puppet.environment_path = "environments"
+    puppet.hiera_config_path = "hiera/hiera.yaml"
+    puppet.facter = {role: role}
+    puppet.options = puppet_opts
+  end
+  box.vm.provision "shell", path: "provision.sh"
+}
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -41,27 +54,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
-  config.ssh.forward_agent = false
+  config.ssh.forward_agent = true
 
   config.ssh.insert_key = false
-  #config.ssh.username = 'vagrant'
-  #config.ssh.password = 'vagrant'
-  #config.ssh.private_key_path = "/home/maxim/.ssh/id_rsa"
 
   #Here place for setting of your proxy server
   #config.proxy.http     = "http://172.17.100.196:8080"
   #config.proxy.https    = "http://172.17.100.196:8080"
   #config.proxy.no_proxy = "localhost,127.0.0.1,192.168.0.0/24"
-
-  #config.vm.provision "puppet" do |puppet|
-#      puppet.module_path = "modules"
-#      puppet.module_path = "roles"
-#      puppet.manifest_file = "site.pp"
-#      puppet.hiera_config_path = "./hiera/hiera.yaml ./manifests/site.pp"
-#      puppet.environment = "development"
-#      puppet.options = "--verbose --debug"
-#  end
-
 
 #Configurations for servers
 
