@@ -1,35 +1,27 @@
 require 'spec_helper'
 
 describe 'puppet::server::service' do
-  on_supported_os.each do |os, os_facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
-    next if os_facts[:osfamily] == 'windows'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :clientcert             => 'puppetmaster.example.com',
-          :concat_basedir         => '/nonexistant',
-          :fqdn                   => 'puppetmaster.example.com',
-          :puppetversion          => Puppet.version,
-      }) end
-
+      master_service = 'puppetmaster'
       if Puppet.version < '4.0'
         additional_facts = {}
       else
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+        if facts[:osfamily] == 'Debian'
+          master_service = 'puppet-master'
+        end
       end
 
-      let(:facts) { default_facts.merge(additional_facts) }
-
-      master_service = 'puppetmaster'
-      if os_facts[:osfamily] == 'Debian' && os_facts[:puppetversion].to_f > 4.0
-        master_service = 'puppet-master'
+      let(:facts) do
+        facts.merge(additional_facts)
       end
 
       describe 'default_parameters' do
         it { should_not contain_service(master_service) }
         it { should_not contain_service('puppetserver') }
+        it { should_not contain_exec('restart_puppetmaster') }
       end
 
       describe 'when puppetmaster => true' do
@@ -68,6 +60,17 @@ describe 'puppet::server::service' do
           should contain_service('puppetserver').with({
             :ensure => 'stopped',
             :enable => 'false',
+          })
+        end
+      end
+
+      describe 'when rack => true' do
+        let(:params) { {:rack => true, :puppetserver => :undef, :puppetmaster => :undef, :app_root => '/etc/puppet/rack'} }
+        it do
+          should contain_exec('restart_puppetmaster').with({
+            :command      => '/bin/touch /etc/puppet/rack/tmp/restart.txt',
+            :refreshonly  => true,
+            :cwd          => '/etc/puppet/rack',
           })
         end
       end

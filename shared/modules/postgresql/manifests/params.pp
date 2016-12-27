@@ -1,6 +1,6 @@
 # PRIVATE CLASS: do not use directly
 class postgresql::params inherits postgresql::globals {
-  $version                    = $postgresql::globals::globals_version
+  $version                    = '9.5'
   $postgis_version            = $postgresql::globals::globals_postgis_version
   $listen_addresses           = 'localhost'
   $port                       = 5432

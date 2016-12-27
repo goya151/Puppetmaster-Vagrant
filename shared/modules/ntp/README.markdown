@@ -68,7 +68,7 @@ class { '::ntp':
     '127.0.0.1',
     '-6 ::1',
     'ntp1.corp.com nomodify notrap nopeer noquery',
-    'ntp1.corp.com nomodify notrap nopeer noquery'
+    'ntp2.corp.com nomodify notrap nopeer noquery'
   ],
 }
 ```
@@ -109,7 +109,7 @@ class { '::ntp':
   servers         => [ 'ntp1.corp.com', 'ntp2.corp.com' ],
   restrict        => ['127.0.0.1'],
   service_manage  => false,
-  config_template => 'different/module/custom.template.erb',
+  config_epp      => 'different/module/custom.template.epp',
 }
 ```
 
@@ -131,10 +131,6 @@ class { '::ntp':
 
 The following parameters are available in the `::ntp` class:
 
-####`autoupdate`
-
-**Deprecated; replaced by the `package_ensure` parameter**. Tells Puppet whether to keep the ntp module updated to the latest version available. Valid options: 'true' or 'false'. Default value: 'false'
-
 ####`broadcastclient`
 
 Enable reception of broadcast server messages to any local interface.
@@ -143,18 +139,39 @@ Enable reception of broadcast server messages to any local interface.
 
 Specifies a file for ntp's configuration info. Valid options: string containing an absolute path. Default value: '/etc/ntp.conf' (or '/etc/inet/ntp.conf' on Solaris)
 
+
+####`config_dir`
+
+Specifies a directory for the ntp configuration files. Valid options: string containing an absolute path. Default value: undef
+
+####`config_file_mode`
+
+Specifies a file mode for the ntp configuration file. Valid options: string containing file mode. Default value: '0664'
+
 ####`config_template`
 
-Specifies a file to act as a template for the config file. Valid options: string containing a path (absolute, or relative to the module path). Default value: 'ntp/ntp.conf.erb'
+Specifies a file to act as a ERB template for the config file. Valid options: string containing a path (absolute, or relative to the module path). Example value: 'ntp/ntp.conf.erb'. Validation error will be thrown if this param is supplied as well as the `config_epp` param.
+
+####`config_epp`
+
+Specifies a file to act as a EPP template for the config file. Valid options: string containing a path (absolute, or relative to the module path). Example value: 'ntp/ntp.conf.epp'. Validation error will be thrown if this param is supplied as well as the `config_template` param.
 
 ####`disable_auth`
 
-Do  not  require cryptographic authentication for broadcast client, multicast 
+Do  not  require cryptographic authentication for broadcast client, multicast
 client and symmetric passive associations.
+
+####`disable_auth`
+
+Disables kernel time discipline.
+
+####`disable_dhclient`
+
+Disables `ntp-servers` in `dhclient.conf` to avoid Dhclient from managing the NTP configuration.
 
 ####`disable_monitor`
 
-Tells Puppet whether to refrain from monitoring the NTP service. Valid options: 'true' or 'false'. Default value: 'false'
+Disables the monitoring facility in NTP. Valid options: true or false. Default value: true
 
 ####`driftfile`
 
@@ -166,27 +183,35 @@ Used to provide additional information for individual clock drivers. Valid optio
 
 ####`iburst_enable`
 
-Specifies whether to enable the iburst option for every NTP peer. Valid options: 'true' or 'false'. Default value: 'false' (except on AIX and Debian)
+Specifies whether to enable the iburst option for every NTP peer. Valid options: true or false. Default value: false (except on AIX and Debian)
 
 ####`interfaces`
 
 Specifies one or more network interfaces for NTP to listen on. Valid options: array. Default value: [ ]
 
+####`interfaces_ignore`
+
+Specifies one or more ignore pattern for the NTP listener configuration (e.g. all, wildcard, ipv6, ...). Valid options: array. Default value: [ ]
+
+#### `keys`
+
+Distributes keys to keys file. Valid options: array of keys. Default value: [ ]
+
 ####`keys_controlkey`
 
-Provides a control key to be used by NTP. Valid options: string. Default value: ' '
+Specifies the key identifier to use with the ntpq utility. Valid options: value in the range of 1 to 65,534 inclusive. Default value: ' '
 
 ####`keys_enable`
 
-Tells Puppet whether to enable key-based authentication. Valid options: 'true' or 'false'. Default value: 'false'
+Tells Puppet whether to enable key-based authentication. Valid options: true or false. Default value: false
 
 ####`keys_file`
 
-Specifies an NTP keys file. Valid options: string containing an absolute path. Default value: '/etc/ntp/keys' (except on AIX, SLES, and Solaris)
+Specifies the complete path and location of the MD5 key file containing the keys and key identifiers used by ntpd, ntpq and ntpdc when operating with symmetric key cryptography. Valid options: string containing an absolute path. Default value: `/etc/ntp.keys` (except on RedHat and Amazon, where it is `/etc/ntp/keys`).
 
 ####`keys_requestkey`
 
-Provides a request key to be used by NTP. Valid options: string. Default value: ' '
+Specifies the key identifier to use with the ntpdc utility program. Valid options: value in the range of 1 to 65,534 inclusive. Default value: ' '
 
 #### `keys_trusted`:
 Provides one or more keys to be trusted by NTP. Valid options: array of keys. Default value: [ ]
@@ -207,17 +232,28 @@ Tells Puppet to use non-standard minimal poll interval of upstream servers. Vali
 
 Tells Puppet to use non-standard maximal poll interval of upstream servers. Valid options: 3 to 16. Default option: undef, except FreeBSD (on FreeBSD `maxpoll` set 9 by default).
 
+####`ntpsigndsocket`
+
+Tells NTP to sign packets using the socket in the ntpsigndsocket path. NTP must be configured to sign sockets for this to work.
+Valid option: a path to the socket directory; for example, for Samba it would be:
+
+~~~~
+ntpsigndsocket = usr/local/samba/var/lib/ntp_signd/
+~~~~
+
+Default value: undef.
+
 ####`package_ensure`
 
 Tells Puppet whether the NTP package should be installed, and what version. Valid options: 'present', 'latest', or a specific version number. Default value: 'present'
 
 ####`package_manage`
 
-Tells Puppet whether to manage the NTP package. Valid options: 'true' or 'false'. Default value: 'true'
+Tells Puppet whether to manage the NTP package. Valid options: true or false. Default value: true
 
 ####`package_name`
 
-Tells Puppet what NTP package to manage. Valid options: string. Default value: 'ntp' (except on AIX and Solaris)
+Tells Puppet what NTP package to manage. Valid options: Array[string]. Default value: ['ntp'] (except on AIX and Solaris)
 
 ####`panic`
 
@@ -259,7 +295,7 @@ Specifies one or more servers to be used as NTP peers. Valid options: array. Def
 
 ####`service_enable`
 
-Tells Puppet whether to enable the NTP service at boot. Valid options: 'true' or 'false'. Default value: 'true'
+Tells Puppet whether to enable the NTP service at boot. Valid options: true or false. Default value: true
 
 ####`service_ensure`
 
@@ -267,23 +303,63 @@ Tells Puppet whether the NTP service should be running. Valid options: 'running'
 
 ####`service_manage`
 
-Tells Puppet whether to manage the NTP service. Valid options: 'true' or 'false'. Default value: 'true'
+Tells Puppet whether to manage the NTP service. Valid options: true or false. Default value: true
 
 ####`service_name`
 
 Tells Puppet what NTP service to manage. Valid options: string. Default value: varies by operating system
 
+####`service_provider`
+
+Tells Puppet which service provider to use for NTP. Valid options: string. Default value: 'undef'
+
+####`step_tickers_file`
+
+Location of the step tickers file on the managed system. Default value: varies by operating system
+
+####`step_tickers_template`
+
+Location of the step tickers ERB template file. Default value: varies by operating system. Validation error will be thrown if this is specified as well as the `step_tickers_epp` param.
+
+####`step_tickers_epp`
+
+Location of the step tickers EPP template file. Default value: varies by operating system. Validation error will be thrown if this is specified as well as the `step_tickers_template` param.
+
 ####`stepout`
 
-Tells puppet to change stepout. Applies only if `tinker` value is 'true'. Valid options: unsigned shortint digit. Default value: undef.
+Tells puppet to change stepout. Applies only if `tinker` value is true. Valid options: unsigned shortint digit. Default value: undef.
+
+####`tos`
+
+Tells Puppet to enable tos options. Valid options: true of false. Default value: false
+
+####`tos_minclock`
+
+Specifies the minclock tos option. Valid options: numeric. Default value: 3
+
+####`tos_minsane`
+
+Specifies the minsane tos option. Valid options: numeric. Default value: 1
+
+####`tos_floor`
+
+Specifies the floor tos option. Valid options: numeric. Default value: 1
+
+####`tos_ceiling`
+
+Specifies the ceiling tos option. Valid options: numeric. Default value: 15
+
+####`tos_cohort`
+
+Specifies the cohort tos option. Valid options: '0' or '1'. Default value: 0
 
 ####`tinker`
 
-Tells Puppet to enable tinker options. Valid options: 'true' of 'false'. Default value: 'false'
+Tells Puppet to enable tinker options. Valid options: true of false. Default value: false
 
 ####`udlc`
 
-Specifies whether to configure ntp to use the undisciplined local clock as a time source. Valid options: 'true' or 'false'. Default value: 'false'
+Specifies whether to configure ntp to use the undisciplined local clock as a time source. Valid options: true or false. Default value: false
 
 ####`udlc_stratum`
 
@@ -291,7 +367,7 @@ Specifies the stratum the server should operate at when using the undisciplined 
 
 ##Limitations
 
-This module has been tested on [all PE-supported platforms](https://forge.puppetlabs.com/supported#compat-matrix), and no issues have been identified.
+This module has been tested on [all PE-supported platforms](https://forge.puppetlabs.com/supported#compat-matrix), and no issues have been identified. Additionally, it is tested (but not supported) on Solaris 10 and Fedora 20-22.
 
 ##Development
 

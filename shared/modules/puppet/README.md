@@ -150,9 +150,12 @@ and `X-SSL-Subject` HTTP headers to have been set on the front end server.
 
 The listening port can be configured by setting `server_http_port` (which defaults to 8139).
 
-By default, this HTTP instance accepts no connection (`deny all` in the `<Directory>`
+For passenger setups, this HTTP instance accepts no connections by default (`deny all` in the `<Directory>`
 snippet). Allowed hosts can be configured by setting the `server_http_allow` parameter
 (which expects an array).
+
+For puppetserver, this HTTP instance accepts **ALL** connections and no further restrictions can be configured. The
+`server_http_allow` parameter has no effect at all!
 
 **Note that running an HTTP puppetmaster is a huge security risk when improperly
 configured. Allowed hosts should be tightly controlled; anyone with access to an allowed
@@ -176,7 +179,8 @@ version available.
 
 Currently supported values and configuration behaviours are:
 
-* `2.6.x` (default) - configures the /status API endpoint in `web-routes.conf`
+* `2.7.x` (default) - creates `product.conf`
+* `2.6.x` - configures the /status API endpoint in `web-routes.conf`
 * `2.5.x` - configures the certificate authority in `ca.cfg`
 * `2.4.99` - configures for both 2.4 and 2.5, with `bootstrap.cfg`
   and `ca.cfg`

@@ -69,6 +69,8 @@ class puppet::params {
       $root_group                 = undef
       $server_puppetserver_dir    = undef
       $server_puppetserver_vardir = undef
+      $server_puppetserver_rundir = undef
+      $server_puppetserver_logdir = undef
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
     }
@@ -85,6 +87,26 @@ class puppet::params {
       $root_group                 = undef
       $server_puppetserver_dir    = undef
       $server_puppetserver_vardir = '/var/puppet'
+      $server_puppetserver_rundir = '/var/run/puppetserver'
+      $server_puppetserver_logdir = '/var/log/puppetserver'
+      $server_ruby_load_paths     = []
+      $server_jruby_gem_home      = undef
+    }
+
+    'Archlinux' : {
+      $dir                        = '/etc/puppetlabs/puppet'
+      $codedir                    = '/etc/puppetlabs/code'
+      $logdir                     = '/var/log/puppetlabs/puppet'
+      $rundir                     = '/var/run/puppetlabs'
+      $ssldir                     = '/etc/puppetlabs/puppet/ssl'
+      $vardir                     = '/opt/puppetlabs/puppet/cache'
+      $sharedir                   = '/opt/puppetlabs/puppet'
+      $bindir                     = '/usr/bin'
+      $root_group                 = undef
+      $server_puppetserver_dir    = undef
+      $server_puppetserver_vardir = undef
+      $server_puppetserver_rundir = undef
+      $server_puppetserver_logdir = undef
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
     }
@@ -101,6 +123,8 @@ class puppet::params {
         $bindir                     = '/opt/puppetlabs/bin'
         $server_puppetserver_dir    = '/etc/puppetlabs/puppetserver'
         $server_puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
+        $server_puppetserver_rundir = '/var/run/puppetlabs/puppetserver'
+        $server_puppetserver_logdir = '/var/log/puppetlabs/puppetserver'
         $server_ruby_load_paths     = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
         $server_jruby_gem_home      = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
       } else {
@@ -117,6 +141,8 @@ class puppet::params {
         $bindir                     = '/usr/bin'
         $server_puppetserver_dir    = '/etc/puppetserver'
         $server_puppetserver_vardir = $vardir
+        $server_puppetserver_rundir = undef
+        $server_puppetserver_logdir = undef
         $server_ruby_load_paths     = []
         $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
       }
@@ -168,19 +194,21 @@ class puppet::params {
   $auth_allowed = ['$1']
 
   # Will this host be a puppet agent ?
-  $agent                     = true
-  $remove_lock               = true
-  $client_certname           = $::clientcert
+  $agent                      = true
+  $remove_lock                = true
+  $client_certname            = $::clientcert
 
   # Custom puppetmaster
-  if defined('$trusted') and $::trusted['authenticated'] == 'local' {
-    $puppetmaster            = undef
+  # needed due to a PUP-4072
+  # more information in https://github.com/theforeman/puppet-foreman/commit/5fe3239da0c6fbac76172f61042a69ab3a7eb4e6
+  if versioncmp($::puppetversion, '3.7.5') < 0 or defined('$::puppetmaster') {
+    $puppetmaster             = $::puppetmaster
   } else {
-    $puppetmaster            = $::puppetmaster
+    $puppetmaster             = undef
   }
 
   # Hashes containing additional settings
-  $additional_settings   =      {}
+  $additional_settings        = {}
   $agent_additional_settings  = {}
   $server_additional_settings = {}
 
@@ -331,6 +359,10 @@ class puppet::params {
       $agent_restart_command = undef
       $unavailable_runmodes = ['cron', 'systemd.timer']
     }
+    'Archlinux': {
+      $agent_restart_command = "/usr/bin/systemctl reload-or-restart ${service_name}"
+      $unavailable_runmodes = ['cron']
+    }
     default  : {
       $agent_restart_command = undef
       $unavailable_runmodes = ['systemd.timer']
@@ -340,7 +372,7 @@ class puppet::params {
   # Foreman parameters
   $lower_fqdn              = downcase($::fqdn)
   $server_foreman          = true
-  $server_facts            = true
+  $server_foreman_facts    = true
   $server_puppet_basedir   = $aio_package ? {
     true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
     false => undef,
@@ -368,23 +400,26 @@ class puppet::params {
   $server_jvm_max_heap_size = '2G'
   $server_jvm_extra_args    = '-XX:MaxPermSize=256m'
 
-  $server_ssl_dir_manage           = true
-  $server_default_manifest         = false
-  $server_default_manifest_path    = '/etc/puppet/manifests/default_manifest.pp'
-  $server_default_manifest_content = '' # lint:ignore:empty_string_assignment
-  $server_max_active_instances     = $::processorcount
-  $server_idle_timeout             = 1200000
-  $server_connect_timeout          = 120000
-  $server_enable_ruby_profiler     = false
-  $server_ca_auth_required         = true
-  $server_admin_api_whitelist      = [ 'localhost', $lower_fqdn ]
-  $server_ca_client_whitelist      = [ 'localhost', $lower_fqdn ]
-  $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
-  $server_ssl_protocols            = [ 'TLSv1.2', ]
+  $server_ssl_dir_manage                  = true
+  $server_default_manifest                = false
+  $server_default_manifest_path           = '/etc/puppet/manifests/default_manifest.pp'
+  $server_default_manifest_content        = '' # lint:ignore:empty_string_assignment
+  $server_max_active_instances            = $::processorcount
+  $server_max_requests_per_instance       = 0
+  $server_idle_timeout                    = 1200000
+  $server_connect_timeout                 = 120000
+  $server_enable_ruby_profiler            = false
+  $server_ca_auth_required                = true
+  $server_admin_api_whitelist             = [ 'localhost', $lower_fqdn ]
+  $server_ca_client_whitelist             = [ 'localhost', $lower_fqdn ]
+  $server_cipher_suites                   = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA' ]
+  $server_ssl_protocols                   = [ 'TLSv1.2' ]
+  $server_check_for_updates               = true
+  $server_environment_class_cache_enabled = false
 
   # Puppetserver >= 2.2 Which auth.conf shall we use?
   $server_use_legacy_auth_conf     = false
 
   # For puppetserver 2, certain configuration parameters are version specific. We assume a particular version here.
-  $server_puppetserver_version     = '2.6.0'
+  $server_puppetserver_version     = '2.7.0'
 }
