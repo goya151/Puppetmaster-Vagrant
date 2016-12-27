@@ -1,74 +1,10 @@
 forge "https://forgeapi.puppetlabs.com"
 
-# replaced by a custom version since we want to use our own mirrors
-#mod "stahnma/epel"
+#For theforeman/puppet
+mod 'theforeman-puppet', '7.0.0'
 
-# replaced by a custom version due to https://github.com/saz/puppet-ssh/issues/49
-#mod "saz/ssh"
-mod "saz/vim"
+mod 'puppetlabs-puppetdb', '5.1.2'
 
-mod "puppetlabs/apt"
-mod "puppetlabs/stdlib"
-mod "puppetlabs/java"
-mod "puppetlabs/mysql"
+mod 'puppetlabs-postgresql', '4.8.0'
 
-mod "elasticsearch/elasticsearch", "0.4.0"
-mod "elasticsearch/logstash"
-
-# CA Certificate handling
-mod "pcfens/ca_cert"
-
-# required for redis nodes
-mod "fsalum/redis"
-
-# ci-server
-mod "rtyler/jenkins"
-
-# nameserver
-mod "netmanagers/dnsmasq"
-
-# apimock and frontend app server
-mod "example42/php"
-mod "jfryman/nginx"
-
-# rabbitmq cluster
-mod "puppetlabs/rabbitmq"
-
-# package repository server (pulp)
-mod "puppetlabs/mongodb"
-
-# Nagios monitoring server
-mod "thias/nagios"
-mod "thias/apache_httpd"
-#"thias/selinux" module has been moved to 'custom' modules. See: https://jira.enadco.net/browse/OPS-342
-
-# Module for Hubot server
-mod "evenup/hubot"
-
-# foreman
-mod "theforeman/foreman"
-mod "theforeman/foreman_proxy" #, "1.6.1"
-mod "theforeman/puppet"
-mod "puppetlabs/puppetdb"
-
-# hypervisor setup
-# mod "thias/libvirt"
-
-# general networking
-mod "Asquera/network", :git => 'https://github.com/Asquera/puppet-network.git', :ref => 'master'
-
-# Dovecot (replaced to custom: need to use custom tamplate for connect to PostgreSQL)
-# Postfix for Messaging Infrastructure.
-#mod "mjhas/dovecot"
-#mod "mjhas/postfix"
-
-# Awstats
-#mod "Puppet-Finland/awstats", :git => 'https://github.com/Puppet-Finland/awstats.git', :ref => 'master'
-# Installed and moved to custom. As, the module needs cutomizations with package names, module name itself, etc.
-
-# Neo4j
-#mod "amosjwood/neo4j"
-# Installed and moved to custome. As, the module package 'wget' resource in 'init.pp' duplicates the one defined in base.pp
-
-# puppet-gpasswd
-mod "onyxpoint/gpasswd"
+mod 'puppetlabs-ntp', '6.0.0'
