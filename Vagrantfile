@@ -68,17 +68,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'puppetmaster' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'puppetmaster.dev'
-    box.vm.network "public_network", use_dhcp_assigned_default_route: true
-    configure_providers.call(box, "puppetmaster.dev", 8196, 16)
-    provision_puppet.call(box, "192.168.245.50", "puppetmaster")
+    box.vm.network "private_network", ip: "192.168.12.10"
+    configure_providers.call(box, "puppetmaster.dev", 4096, 4)
+    provision_puppet.call(box, "192.168.12.10", "repository-server")
   end
 
   config.vm.define 'repository' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
     box.vm.host_name = 'repository.dev'
-    box.vm.network "public_network", use_dhcp_assigned_default_route: true
+    box.vm.network "public_network", ip: "192.168.12.11"
     configure_providers.call(box, "repository.dev", 2048, 16)
-    provision_puppet.call(box, "192.168.245.51", "repository-server")
+    provision_puppet.call(box, "192.168.12.11", "repository-server")
   end
 
   config.vm.define 'test-node01' do |box|
