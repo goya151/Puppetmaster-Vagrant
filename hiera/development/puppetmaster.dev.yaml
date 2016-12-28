@@ -12,3 +12,5 @@ puppet::server_reports: 'store'
 puppet::server_external_nodes: ''
 puppet::server_reports: 'puppetdb'
 puppet::server_storeconfigs_backend: 'puppetdb'
+postgresql::globals::manage_package_repo: true
+postgresql::globals::version: '9.5'
