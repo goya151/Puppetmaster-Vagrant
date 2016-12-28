@@ -27,13 +27,8 @@ else
   puppet_opts << "--logdest /dev/null" # silent output
 end
 
-
-#provision_puppet = -> (box, ip, role) {
-#    box.vm.provision "shell", args: [puppet_opts], path: "provision.sh"
-#}
-
 provision_puppet = -> (box, ip, role) {
-  box.vm.provision "shell", path: "provision.sh"
+  box.vm.provision "shell", path: "bootstrap.sh"
   box.vm.provision "puppet" do |puppet|
     puppet.environment = 'development'
     puppet.module_path = ["manifests", "shared/modules", "roles", "custom/modules"]
@@ -62,10 +57,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
   config.ssh.forward_agent = true
-
   config.ssh.insert_key = false
 
-  #Here place for setting of your proxy server
+  #Here place for setting for proxy server
   #config.proxy.http     = "http://172.17.100.196:8080"
   #config.proxy.https    = "http://172.17.100.196:8080"
   #config.proxy.no_proxy = "localhost,127.0.0.1,192.168.0.0/24"
@@ -73,24 +67,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #Configurations for servers
 
   config.vm.define 'puppetmaster' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
+    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
     box.vm.host_name = 'puppetmaster.dev'
     box.vm.network "private_network", ip: "192.168.12.10"
-    configure_providers.call(box, "puppetmaster.dev", 4096, 4)
-    provision_puppet.call(box, "192.168.12.10", "repository-server")
+    configure_providers.call(box, "puppetmaster.dev", 8192, 8)
+    provision_puppet.call(box, "192.168.12.10", "puppetmaster")
   end
 
   config.vm.define 'repository' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
+    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
     box.vm.host_name = 'repository.dev'
     box.vm.network "public_network", ip: "192.168.12.11"
     configure_providers.call(box, "repository.dev", 2048, 16)
-    provision_puppet.call(box, "192.168.12.11", "repository-server")
+    provision_puppet.call(box, "192.168.12.11", "repository")
   end
 
   config.vm.define 'test-node01' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
-    #box.vm.box_url= 'https://cloud-images.ubuntu.com/vagrant/vivid/20150903/vivid-server-cloudimg-amd64-vagrant-disk1.box'
+    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
     box.vm.host_name = 'test-node01.dev'
     box.vm.network "public_network", ip: "192.168.245.52" #use_dhcp_assigned_default_route: true
     configure_providers.call(box, "test-node01.dev", 512, 8)
@@ -98,7 +91,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define 'test-node02' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
+    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
     box.vm.host_name = 'test-node02.dev'
     box.vm.network "public_network", ip: "192.168.245.53"
     configure_providers.call(box, "test-node02.dev", 2048, 16)
@@ -106,7 +99,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   end
   config.vm.define 'test-node03' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-puppet'
+    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
     box.vm.host_name = 'test-node03.dev'
     box.vm.network "public_network", ip: "192.168.245.54"
     configure_providers.call(box, "test-node03.dev", 2048, 16)
