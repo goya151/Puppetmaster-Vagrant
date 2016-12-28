@@ -33,6 +33,7 @@ end
 #}
 
 provision_puppet = -> (box, ip, role) {
+  box.vm.provision "shell", path: "provision.sh"
   box.vm.provision "puppet" do |puppet|
     puppet.environment = 'development'
     puppet.module_path = ["manifests", "shared/modules", "roles", "custom/modules"]
@@ -43,7 +44,13 @@ provision_puppet = -> (box, ip, role) {
     puppet.facter = {role: role}
     puppet.options = puppet_opts
   end
-  box.vm.provision "shell", path: "provision.sh"
+  box.vm.provision "shell", inline: "
+echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
+echo Process is complete. Some information about this VM:
+echo +++ IP  information +++; echo $(ip a | grep 'inet' | cut -f1 -d '/' | grep '192' )
+echo +++ SSH information +++; echo vagrant ssh $(hostname | cut -f 1 -d '.')
+echo ++++++++++++++++++++++++++++++++++++++++++++++++++++
+echo VM is ready."
 }
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
