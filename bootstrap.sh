@@ -16,8 +16,8 @@ echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
       # Check current puppet version
       VERSION=`/usr/bin/puppet --version`
-      if [ ! $VERSION = "4.8.1" ]; then
+      if [ ! $VERSION = "4.9.4" ]; then
         apt-get -y purge puppet*
         cd /tmp && wget http://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb && dpkg -i ./puppetlabs-release-pc1-xenial.deb
-        cd /tmp && wget http://apt.puppetlabs.com/pool/xenial/PC1/p/puppet-agent/puppet-agent_1.8.2-1xenial_amd64.deb && dpkg -i ./puppet-agent_1.8.2-1xenial_amd64.deb
+        cd /tmp && wget http://apt.puppetlabs.com/pool/xenial/PC1/p/puppet-agent/puppet-agent_1.9.3-1xenial_amd64.deb && dpkg -i ./puppet-agent_1.9.3-1xenial_amd64.deb
       fi
