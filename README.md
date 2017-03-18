@@ -6,8 +6,20 @@
 VirtualBox - https://www.virtualbox.org/wiki/Downloads
 Vagrant   - http://www.vagrantup.com/downloads.html
 
-For first start needs some time for download basebox from internet.<br/>
+Have to be installed puppet plugins:
+```
+librarian-puppet (2.2.3)
+vagrant-cachier (1.2.1)
+vagrant-librarian-puppet (0.9.2)
+vagrant-share (1.1.7, system)
+```
 
+For manual install dependencies via librarian:
+```
+librarian-puppet update --verbose
+```
+
+For first start needs some time for download basebox from internet.<br/>
 
 | Vagrant command | Description                                                   |
 | -------------   |:--------------------------------------------------------------|
