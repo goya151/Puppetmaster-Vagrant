@@ -20,3 +20,4 @@ packer.log
 old_modules
 modules/*
 Puppetfile.lock
+*.log
