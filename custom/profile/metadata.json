@@ -1,0 +1,15 @@
+{
+  "name": "maximmirny-profile",
+  "version": "0.0.1",
+  "author": "Maxim Mirny",
+  "summary": null,
+  "license": "Apache-2.0",
+  "source": "https://github.com/maximmirny/",
+  "project_page": "https://github.com/maximmirny/",
+  "issues_url": "https://github.com/maximmirny/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
