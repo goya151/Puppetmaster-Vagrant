@@ -7,15 +7,15 @@ forge "https://forgeapi.puppetlabs.com"
 #   :path => '../puppet-el/'
    # :git => 'git@gitlab.afdata.local:linux/puppet-el.git', :ref => 'devel'
 
-mod 'puppetlabs/apt'
+mod 'puppetlabs/apt', '2.3.0'
 
-mod 'puppetlabs/ntp'
+mod 'puppetlabs/ntp', '6.0.0'
 
-mod 'theforeman-puppet'
+mod 'theforeman-puppet', '7.0.1'
 
-mod 'puppetlabs-postgresql'
+mod 'puppetlabs-postgresql', '4.9.0'
 
-mod 'puppetlabs/puppetdb'
+mod 'puppetlabs/puppetdb', '5.1.2'
 
 mod 'maximmirny/accounts',
     :path => './custom/accounts/'
