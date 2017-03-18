@@ -11,6 +11,10 @@ mod 'puppetlabs/apt'
 
 mod 'puppetlabs/ntp'
 
+mod 'theforeman-puppet'
+
+mod 'puppetlabs-postgresql'
+
 mod 'puppetlabs/puppetdb'
 
 mod 'maximmirny/accounts',
