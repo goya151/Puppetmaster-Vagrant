@@ -19,3 +19,4 @@ packer.log
 .idea
 old_modules
 modules/*
+Puppetfile.lock
