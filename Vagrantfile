@@ -31,7 +31,7 @@ provision_puppet = -> (box, ip, role) {
   box.vm.provision "shell", path: "bootstrap.sh"
   box.vm.provision "puppet" do |puppet|
     puppet.environment = 'development'
-    puppet.module_path = ["manifests", "shared/modules", "roles", "custom/modules"]
+    puppet.module_path = ["manifests", "modules", "roles"]
     puppet.manifest_file = "site.pp"
     puppet.manifests_path = "manifests"
     puppet.environment_path = "environments"
@@ -67,7 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #Configurations for servers
 
   config.vm.define 'puppetmaster' do |box|
-    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
+    box.vm.box = 'ubuntu/xenial64'
     box.vm.host_name = 'puppetmaster.dev'
     box.vm.network "private_network", ip: "192.168.12.10"
     configure_providers.call(box, "puppetmaster.dev", 8192, 8)
@@ -75,34 +75,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define 'repository' do |box|
-    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
+    box.vm.box = 'ubuntu/xenial64'
     box.vm.host_name = 'repository.dev'
-    box.vm.network "public_network", ip: "192.168.12.11"
-    configure_providers.call(box, "repository.dev", 2048, 16)
+    box.vm.network "private_network", ip: "192.168.12.11"
+    configure_providers.call(box, "repository.dev", 1024, 8)
     provision_puppet.call(box, "192.168.12.11", "repository")
   end
 
   config.vm.define 'test-node01' do |box|
-    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
+    box.vm.box = 'ubuntu/xenial64'
     box.vm.host_name = 'test-node01.dev'
-    box.vm.network "public_network", ip: "192.168.245.52" #use_dhcp_assigned_default_route: true
-    configure_providers.call(box, "test-node01.dev", 512, 8)
+    box.vm.network "private_network", ip: "192.168.12.52" #use_dhcp_assigned_default_route: true
+    configure_providers.call(box, "test-node01.dev", 1024, 8)
     provision_puppet.call(box, "192.168.245.52", "test-node01")
   end
 
   config.vm.define 'test-node02' do |box|
-    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
+    box.vm.box = 'ubuntu/xenial64'
     box.vm.host_name = 'test-node02.dev'
-    box.vm.network "public_network", ip: "192.168.245.53"
-    configure_providers.call(box, "test-node02.dev", 2048, 16)
+    box.vm.network "private_network", ip: "192.168.12.53"
+    configure_providers.call(box, "test-node02.dev", 1024, 8)
     provision_puppet.call(box, "192.168.245.53", "test-node02")
 
   end
   config.vm.define 'test-node03' do |box|
-    box.vm.box = 'maximmirny/Ubuntu_16.04-Puppet4'
+    box.vm.box = 'ubuntu/xenial64'
     box.vm.host_name = 'test-node03.dev'
-    box.vm.network "public_network", ip: "192.168.245.54"
-    configure_providers.call(box, "test-node03.dev", 2048, 16)
+    box.vm.network "private_network", ip: "192.168.12.54"
+    configure_providers.call(box, "test-node03.dev", 1024, 8)
     provision_puppet.call(box, "192.168.245.54", "test-node03")
   end
 
