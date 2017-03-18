@@ -18,3 +18,4 @@ packer.log
 /.idea/
 .idea
 old_modules
+modules/*
