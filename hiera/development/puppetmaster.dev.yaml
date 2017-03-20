@@ -8,9 +8,9 @@ puppet::server_http: true
 puppet::server_puppetdb_host: puppetmaster.dev
 puppet::server_git_repo: false
 puppet::server_foreman: false
-puppet::server_reports: 'store'
 puppet::server_external_nodes: ''
 puppet::server_reports: 'puppetdb'
 puppet::server_storeconfigs_backend: 'puppetdb'
 postgresql::globals::manage_package_repo: true
 postgresql::params::version: '9.5'
+
