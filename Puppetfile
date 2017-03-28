@@ -3,10 +3,6 @@
 
 forge "https://forgeapi.puppetlabs.com"
 
-#mod 'el/el',
-#   :path => '../puppet-el/'
-   # :git => 'git@gitlab.afdata.local:linux/puppet-el.git', :ref => 'devel'
-
 mod 'puppetlabs/apt', '2.3.0'
 
 mod 'puppetlabs/ntp', '6.0.0'
