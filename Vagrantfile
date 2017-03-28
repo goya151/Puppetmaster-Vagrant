@@ -74,14 +74,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     provision_puppet.call(box, "192.168.12.10", "puppetmaster")
   end
 
-  config.vm.define 'mailserver' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-nocm'
-    box.vm.host_name = 'mailserver.dev'
-    box.vm.network "private_network", ip: "192.168.12.11"
-    configure_providers.call(box, "mailserver.dev", 2048, 8)
-    provision_puppet.call(box, "192.168.12.11", "mailserver")
-  end
-
   config.vm.define 'test-node01' do |box|
     box.vm.box = 'puppetlabs/ubuntu-16.04-64-nocm'
     box.vm.host_name = 'test-node01.dev'
