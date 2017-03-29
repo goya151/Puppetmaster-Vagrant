@@ -1,5 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+# vagrant-librarian-puppet
+# librarian-puppet
+
 
 VAGRANTFILE_API_VERSION = "2"
 
