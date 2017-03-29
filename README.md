@@ -1,3 +1,7 @@
+Adoptation for CentOS is in progress!!!
+
+
+
 ## Development environment
 
 ### First start:
