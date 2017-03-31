@@ -7,7 +7,7 @@ mod 'puppetlabs/apt', '2.3.0'
 
 mod 'puppetlabs/ntp', '6.0.0'
 
-mod 'theforeman-puppet', '7.0.1'
+mod 'theforeman-puppet', '7.0.2'
 
 mod 'puppetlabs-postgresql', '4.9.0'
 
