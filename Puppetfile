@@ -3,8 +3,6 @@
 
 forge "https://forgeapi.puppetlabs.com"
 
-mod 'puppetlabs/apt', '2.3.0'
-
 mod 'puppetlabs/ntp', '6.0.0'
 
 mod 'theforeman-puppet', '7.0.1'

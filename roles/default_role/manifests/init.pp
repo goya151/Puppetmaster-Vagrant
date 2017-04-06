@@ -13,18 +13,17 @@ class default_role () {
 
   include set_locales
   include accounts
-  include apt
 
   class { '::ntp':
     servers => [ 'pool.ntp.org' ],
   }
 
-  package { [ 'vim', 'git', 'htop', 'python-yaml', 'mc']:
+  package { [ 'vim', 'git', 'python-yaml', 'mc']:
     ensure => installed,
   }
 
   exec { 'Add_hosts':
-    command => 'sudo echo "192.168.12.12 puppetmaster.dev" >> /etc/hosts',
+    command => 'sudo echo "192.168.12.10 puppetmaster.dev" >> /etc/hosts',
     path    => '/usr/bin/:/bin/',
     unless  => 'grep -c puppetmaster /etc/hosts',
   }

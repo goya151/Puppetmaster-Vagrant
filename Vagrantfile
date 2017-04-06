@@ -70,7 +70,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #Configurations for servers
 
   config.vm.define 'puppetmaster' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-nocm'
+    box.vm.box = 'puppetlabs/centos-7.2-64-nocm'
     box.vm.host_name = 'puppetmaster.dev'
     box.vm.network "private_network", ip: "192.168.12.10"
     configure_providers.call(box, "puppetmaster.dev", 8192, 8)
@@ -78,7 +78,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define 'test-node01' do |box|
-    box.vm.box = 'puppetlabs/ubuntu-16.04-64-nocm'
+    box.vm.box = 'puppetlabs/centos-7.2-64-nocm'
     box.vm.host_name = 'test-node01.dev'
     box.vm.network "private_network", ip: "192.168.12.52"
     configure_providers.call(box, "test-node01.dev", 1024, 8)
