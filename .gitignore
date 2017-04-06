@@ -19,5 +19,6 @@ packer.log
 .idea
 old_modules
 modules/*
+!modules/.gitkeep
 Puppetfile.lock
 *.log
