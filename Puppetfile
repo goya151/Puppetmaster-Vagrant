@@ -3,15 +3,15 @@
 
 forge "https://forgeapi.puppetlabs.com"
 
-mod 'puppetlabs/apt', '2.3.0'
+mod 'puppetlabs/apt'
 
-mod 'puppetlabs/ntp', '6.0.0'
+mod 'puppetlabs/ntp'
 
-mod 'theforeman-puppet', '7.0.2'
+mod 'theforeman-puppet'
 
-mod 'puppetlabs-postgresql', '4.9.0'
+mod 'puppetlabs-postgresql'
 
-mod 'puppetlabs/puppetdb', '5.1.2'
+mod 'puppetlabs/puppetdb'
 
 mod 'maximmirny/accounts',
     :path => './custom/accounts/'
