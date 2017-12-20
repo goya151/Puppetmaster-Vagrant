@@ -5,8 +5,7 @@ echo Preparing the VM. This may take some time depending upon the setup.
 echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
       timedatectl set-timezone UTC
-#      sudo echo "192.155.89.90 apt.puppetlabs.com" >> /etc/hosts
-#      sudo echo "217.196.149.50 postgresql.org" >> /etc/hosts
+      echo "192.168.12.10 puppetmaster.dev" >> /etc/hosts
 
       AGENT_VERSION="5.3.3"
 
