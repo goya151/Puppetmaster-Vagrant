@@ -2,7 +2,7 @@
 roles:
 - default_role
 
-puppet::runinterval: '900'
+puppet::runinterval: 900
 
 users:
  'maxim':
