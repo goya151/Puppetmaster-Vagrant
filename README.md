@@ -6,7 +6,9 @@
 VirtualBox - https://www.virtualbox.org/wiki/Downloads
 Vagrant   - http://www.vagrantup.com/downloads.html
 
-Have to be installed puppet plugins:
+`Vagrant 1.9.1`
+
+Have to be installed vagrant plugins:
 ```
 librarian-puppet (2.2.3)
 vagrant-cachier (1.2.1)
