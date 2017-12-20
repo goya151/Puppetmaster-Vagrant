@@ -18,8 +18,8 @@ echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
       # Check current puppet version
       VERSION=`/usr/bin/puppet --version`
-      if [ ! $VERSION = "5.0.1" ]; then
+      if [ ! $VERSION = "5.3.3" ]; then
         apt-get -y purge puppet*
         cd /tmp && wget https://apt.puppetlabs.com/puppet5-release-xenial.deb && apt-get install ./puppet5-release-xenial.deb
-        cd /tmp && wget https://apt.puppetlabs.com/pool/xenial/puppet5/p/puppet-agent/puppet-agent_5.0.1-1xenial_amd64.deb && apt-get install ./puppet-agent_5.0.1-1xenial_amd64.deb
+        cd /tmp && wget https://apt.puppetlabs.com/pool/xenial/puppet5/p/puppet-agent/puppet-agent_$VERSION-1xenial_amd64.deb && apt-get install ./puppet-agent_$VERSION-1xenial_amd64.deb
       fi
